@@ -405,12 +405,7 @@
 
         // Navigation Functions
         function loadYesterdayScores() {
-            fetch('/yesterday-scores')
-                .then(response => response.json())
-                .then(data => {
-                    displayScores(data, 'yesterday');
-                })
-                .catch(err => console.error('Error loading yesterday scores'));
+            window.location.href = 'yesterday.html';
         }
 
         function loadTodayPredictions() {
