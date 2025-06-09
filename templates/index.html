@@ -381,7 +381,7 @@
 
     <!-- Hidden Admin Access with Advertisement -->
     <div class="bottom-left-section">
-        <a href="/login" class="admin-indicator">!</a>
+        <a href="admin-login.html" class="admin-indicator">!</a>
         <div class="bottom-ad">
             <p class="bottom-ad-text">Sponsored Content<br>Click for offers</p>
         </div>
@@ -409,12 +409,7 @@
         }
 
         function loadTodayPredictions() {
-            fetch('/today-predictions')
-                .then(response => response.json())
-                .then(data => {
-                    displayPredictions(data);
-                })
-                .catch(err => console.error('Error loading today predictions'));
+            window.location.href = 'today.html';
         }
 
         function displayScores(data, type) {
