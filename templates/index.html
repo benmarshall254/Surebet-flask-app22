@@ -1,24 +1,339 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SureBet Tips</title>
-</head>
-<body>
-    <h1>Welcome to SureBet Daily Tips</h1>
-
+    
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6332657251575161"
-        crossorigin="anonymous"></script>
-    <ins class="adsbygoogle"
-        style="display:block"
-        data-ad-client="ca-pub-6332657251575161"
-        data-ad-slot="1509818329"
-        data-ad-format="auto"
-        data-full-width-responsive="true"></ins>
-    <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+         crossorigin="anonymous"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <p><a href="/login">Admin Login</a></p>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .subtitle {
+            font-size: 1.3rem;
+            color: #7f8c8d;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+
+        .hero-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .hero-content h2 {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: #5a6c7d;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #3498db;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #7f8c8d;
+            line-height: 1.5;
+            font-size: 1rem;
+        }
+
+        .ad-banner {
+            margin: 30px 0;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .cta-section {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            text-align: center;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 30px 0;
+            box-shadow: 0 15px 35px rgba(52, 152, 219, 0.3);
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .bottom-left-section {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-indicator {
+            background: rgba(255, 255, 255, 0.9);
+            color: #e74c3c;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+            text-decoration: none;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .admin-indicator:hover {
+            opacity: 1;
+        }
+
+        .bottom-ad {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            padding: 8px 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        .bottom-ad-text {
+            font-size: 11px;
+            color: #666;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .footer {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer p {
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+
+        .footer .disclaimer {
+            font-size: 0.9rem;
+            color: #95a5a6;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .header .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .hero-content h2 {
+                font-size: 1.8rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>Welcome to SureBet Daily Tips</h1>
+            <p class="subtitle">Your trusted source for professional betting insights</p>
+        </div>
+
+        <!-- Google AdSense Banner -->
+        <div class="ad-banner">
+            <!-- Home page top banner -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-6332657251575161"
+                 data-ad-slot="1509818329"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="hero-content">
+                <h2>Professional Betting Analysis</h2>
+                <p>Get access to expertly analyzed betting tips with detailed insights and statistics.</p>
+                <p>Our team of professional analysts provides you with the most reliable betting recommendations.</p>
+                <p>Join thousands of successful bettors who trust our daily tips and predictions.</p>
+            </div>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Statistical Analysis</h3>
+                <p>In-depth statistical analysis of teams, players, and historical performance data to ensure accurate predictions.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Expert Predictions</h3>
+                <p>Professional analysts with years of experience provide carefully researched betting tips and strategies.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3>High Success Rate</h3>
+                <p>Our proven track record demonstrates consistent results and profitable betting opportunities for our users.</p>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="cta-section">
+            <h2>Ready to Start Winning?</h2>
+            <p>Join our community of successful bettors and start receiving professional daily tips!</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2024 SureBet Daily Tips. All rights reserved.</p>
+            <p class="disclaimer">Please bet responsibly. Gambling can be addictive.</p>
+        </div>
+    </div>
+
+    <!-- Hidden Admin Access with Advertisement -->
+    <div class="bottom-left-section">
+        <a href="/login" class="admin-indicator">!</a>
+        <div class="bottom-ad">
+            <p class="bottom-ad-text">Sponsored Content<br>Click for offers</p>
+        </div>
+    </div>
+
+    <!-- Flask App.py Integration Script -->
+    <script>
+        // Silent visitor counter - connects to app.py backend
+        fetch('/analytics', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                page: 'index',
+                timestamp: new Date().toISOString()
+            })
+        }).catch(err => {
+            // Silent fail - don't show errors to users
+        });
+    </script>
 </body>
 </html>
