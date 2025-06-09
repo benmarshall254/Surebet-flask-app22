@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today's Predictions - SureBet Tips</title>
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6332657251575161"
+         crossorigin="anonymous"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            font-weight: 300;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+            cursor: pointer;
+            margin-bottom: 30px;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+            background: linear-gradient(45deg, #2980b9, #1f618d);
+        }
+
+        .ad-banner {
+            margin: 30px 0;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .predictions-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-weight: 600;
+            text-align: center;
+            border-bottom: 3px solid #27ae60;
+            padding-bottom: 15px;
+        }
+
+        .prediction-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid #27ae60;
+        }
+
+        .prediction-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .prediction-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .match-teams {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .match-time {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            background: rgba(39, 174, 96, 0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+
+        .prediction-tip {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #27ae60;
+            text-align: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: linear-gradient(45deg, rgba(39, 174, 96, 0.1), rgba(46, 204, 113, 0.1));
+            border-radius: 10px;
+            border: 2px dashed #27ae60;
+        }
+
+        .prediction-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 15px;
+            background: rgba(39, 174, 96, 0.05);
+            border-radius: 10px;
+            border-left: 4px solid #27ae60;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .detail-value {
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+
+        .confidence-badge {
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .confidence-high {
+            background: #27ae60;
+            color: white;
+        }
+
+        .confidence-medium {
+            background: #f39c12;
+            color: white;
+        }
+
+        .confidence-low {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .odds-section {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(52, 152, 219, 0.05);
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+        }
+
+        .odds-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .odds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .odds-item {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            border: 1px solid rgba(52, 152, 219, 0.2);
+        }
+
+        .odds-label {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .odds-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #3498db;
+        }
+
+        .premium-tip {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            color: white;
+            border-left: 5px solid #d35400;
+        }
+
+        .premium-badge {
+            background: #d35400;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer p {
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+
+        .footer .disclaimer {
+            font-size: 0.9rem;
+            color: #95a5a6;
+            font-style: italic;
+        }
+
+        /* Pop-up Ad Styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .popup-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .popup-close:hover {
+            color: #333;
+        }
+
+        .popup-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .popup-text {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .popup-btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .popup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .prediction-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .match-teams {
+                font-size: 1.1rem;
+            }
+
+            .prediction-details {
+                grid-template-columns: 1fr;
+            }
+
+            .odds-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Back Button -->
+        <a href="index.html" class="back-btn">← Back to Home</a>
+
+        <!-- Header Section -->
+        <div class="header">
+            <h1>Today's Predictions</h1>
+            <p class="subtitle">Expert betting tips and analysis for today's matches</p>
+        </div>
+
+        <!-- Google AdSense Banner -->
+        <div class="ad-banner">
+            <!-- Home page top banner -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-6332657251575161"
+                 data-ad-slot="1509818329"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <!-- Predictions Section -->
+        <div class="predictions-section">
+            <h2 class="section-title">Today's Expert Predictions</h2>
+            
+            <div class="prediction-card premium-tip">
+                <div class="prediction-header">
+                    <div class="match-teams">Manchester United vs Tottenham</div>
+                    <div class="match-time">16:30 GMT</div>
+                    <span class="premium-badge">Premium</span>
+                    <span class="confidence-badge confidence-high">High Confidence</span>
+                </div>
+                <div class="prediction-tip">Over 2.5 Goals</div>
+                <div class="prediction-details">
+                    <div class="detail-item">
+                        <span class="detail-label">League:</span>
+                        <span class="detail-value">Premier League</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Stadium:</span>
+                        <span class="detail-value">Old Trafford</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Form:</span>
+                        <span class="detail-value">Both teams attacking</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Key Players:</span>
+                        <span class="detail-value">Available</span>
+                    </div>
+                </div>
+                <div class="odds-section">
+                    <div class="odds-title">Betting Odds Comparison</div>
+                    <div class="odds-grid">
+                        <div class="odds-item">
+                            <div class="odds-label">Bet365</div>
+                            <div class="odds-value">1.75</div>
+                        </div>
+                        <div class="odds-item">
+                            <div class="odds-label">William Hill</div>
+                            <div class="odds-value">1.80</div>
+                        </div>
+                        <div class="odds-item">
+                            <div class="odds-label">Ladbrokes</div>
+                            <div class="odds-value">1.78</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prediction-card">
+                <div class="prediction-header">
+                    <div class="match-teams">Brighton vs Newcastle</div>
+                    <div class="match-time">14:00 GMT</div>
+                    <span class="confidence-badge confidence-high">High Confidence</span>
+                </div>
+                <div class="prediction-tip">Both Teams to Score - YES</div>
+                <div class="prediction-details">
+                    <div class="detail-item">
+                        <span class="detail-label">League:</span>
+                        <span class="detail-value">Premier League</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Stadium:</span>
+                        <span class="detail-value">Amex Stadium</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Head to Head:</span>
+                        <span class="detail-value">Goals in last 5 meetings</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Analysis:</span>
+                        <span class="detail-value">Strong attacking records</span>
+                    </div>
+                </div>
+                <div class="odds-section">
+                    <div class="odds-title">Betting Odds Comparison</div>
+                    <div class="odds-grid">
+                        <div class="odds-item">
+                            <div class="odds-label">Bet365</div>
+                            <div class="odds-value">1.65</div>
+                        </div>
+                        <div class="odds-item">
+                            <div class="odds-label">William Hill</div>
+                            <div class="odds-value">1.70</div>
+                        </div>
+                        <div class="odds-item">
+                            <div class="odds-label">Ladbrokes</div>
+                            <div class="odds-value">1.68</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prediction-card">
+                <div class="prediction-header">
+                    <div class="match-teams">Atletico Madrid vs Valencia</div>
+                    <div class="match-time">18:00 GMT</div>
+                    <span class="confidence-badge confidence-medium">Medium Confidence</span>
+                </div>
+                <div class="prediction-tip">Atletico Madrid Win</div>
+                <div class="prediction-details">
+                    <div class="detail-item">
+                        <span class="detail-label">League:</span>
+                        <span class="detail-value">La Liga</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Stadium:</span>
+                        <span class="detail-value">Wanda Metropolitano</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Home Advantage:</span>
+                        <span class="detail-value">Strong home record</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Team News:</span>
+                        <span class="detail-value">Full strength available</span>
+                    </div>
+                </div>
+                <div class="odds-section">
+                    <div class="odds-title">Betting Odds Comparison</div>
+                    <div class="odds-grid">
+                        <div class="odds-item">
+                            <div class="odds-label">Bet365</div>
+                            <div class="odds-value">1.55</div>
+                        </div>
+                        <div class="odds-item">
+                            <div class="odds-label">William Hill</div>
+                            <div class="odds-value">1.60</div>
+                        </div>
+                        <div class="odds-item">
+                            <div class="odds-label">Ladbrokes</div>
+                            <div class="odds-value">1.58</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prediction-card">
+                <div class="prediction-header">
+                    <div class="match-teams">Inter Milan vs Napoli</div>
+                    <div class="match-time">19:45 GMT</div>
+                    <span class="confidence-badge confidence-high">High Confidence</span>
+                </div>
+                <div class="prediction-tip">Under 3.5 Goals</div>
+                <div class="prediction-details">
+                    <div class="detail-item">
+                        <span class="detail-label">League:</span>
+                        <span class="detail-value">Serie A</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Stadium:</span>
+                        <span class="detail-value">San Siro</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Defensive Records:</span>
+                        <span class="detail-value">Both teams solid</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Recent Form:</span>
+                        <span class="detail-value">Low-scoring matches</span>
+                    </div>
+                </div>
+                <div class="odds-section">
+                    <div class="odds-title">Betting Odds Comparison</div>
+                    <div class="odds-grid">
+                        <div class="odds-item">
+                            <div class="odds-label">Bet365</div>
+                            <div class="odds-value">1.45</div>
+                        </div>
+                        <div class="odds-item">
+                            <div class="odds-label">William Hill</div>
+                            <div class="odds-value">1.50</div>
+                        </div>
+                        <div class="odds-item">
+                            <div class="odds-label">Ladbrokes</div>
+                            <div class="odds-value">1.48</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prediction-card premium-tip">
+                <div class="prediction-header">
+                    <div class="match-teams">PSG vs Marseille</div>
+                    <div class="match-time">20:00 GMT</div>
+                    <span class="premium-badge">Premium</span>
+                    <span class="confidence-badge confidence-medium">Medium Confidence</span>
+                </div>
+                <div class="prediction-tip">PSG Win & Over 1.5 Goals</div>
+                <div class="prediction-details">
+                    <div class="detail-item">
+                        <span class="detail-label">League:</span>
+                        <span class="detail-value">Ligue 1</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Stadium:</span>
+                        <span class="detail-value">Parc des Princes</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Rivalry:</span>
+                        <span class="detail-value">Le Classique</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Star Players:</span>
+                        <span class="detail-value">Expected to play</span>
+                    </div>
+                </div>
+                <div class="odds-section">
+                    <div class="odds-title">Betting Odds Comparison</div>
+                    <div class="odds-grid">
+                        <div class="odds-item">
+                            <div class="odds-label">Bet365</div>
+                            <div class="odds-value">1.85</div>
+                        </div>
+                        <div class="odds-item">
+                            <div class="odds-label">William Hill</div>
+                            <div class="odds-value">1.90</div>
+                        </div>
+                        <div class="odds-item">
+                            <div class="odds-label">Ladbrokes</div>
+                            <div class="odds-value">1.88</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Google AdSense Banner -->
+        <div class="ad-banner">
+            <!-- Home page top banner -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-6332657251575161"
+                 data-ad-slot="1509818329"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2024 SureBet Daily Tips. All rights reserved.</p>
+            <p class="disclaimer">Please bet responsibly. Gambling can be addictive.</p>
+        </div>
+    </div>
+
+    <!-- Pop-up Ad -->
+    <div class="popup-overlay" id="popupAd">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup()">&times;</button>
+            <h3 class="popup-title">🎯 Premium Tips Available!</h3>
+            <p class="popup-text">Get access to our exclusive premium predictions with higher accuracy rates and detailed analysis.</p>
+            <div class="ad-banner" style="margin: 15px 0;">
+                <!-- Popup Ad -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-6332657251575161"
+                     data-ad-slot="1509818329"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+            <button class="popup-btn" onclick="closePopup()">Continue to Free Tips</button>
+        </div>
+    </div>
+
+    <!-- Analytics and Pop-up Script -->
+    <script>
+        // Silent visitor counter
+        fetch('/analytics', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                page: 'today',
+                timestamp: new Date().toISOString()
+            })
+        }).catch(err => {
+            // Silent fail - don't show errors to users
+        });
+
+        // Pop-up functionality
+        function showPopup() {
+            document.getElementById('popupAd').style.display = 'flex';
+        }
+
+        function closePopup() {
+            document.getElementById('popupAd').style.display = 'none';
+        }
+
+        // Show popup after 5 seconds
+        setTimeout(showPopup, 5000);
+
+        // Show popup when user tries to leave the page
+        let hasShownExitPopup = false;
+        document.addEventListener('mouseleave', function(e) {
+            if (e.clientY <= 0 && !hasShownExitPopup) {
+                hasShownExitPopup = true;
+                showPopup();
+            }
+        });
+
+        // Show popup on scroll (after scrolling 50% of page)
+        let hasShownScrollPopup = false;
+        window.addEventListener('scroll', function() {
+            if (!hasShownScrollPopup && window.scrollY > document.body.scrollHeight * 0.5) {
+                hasShownScrollPopup = true;
+                setTimeout(showPopup, 2000);
+            }
+        });
+
+        // Close popup when clicking outside
+        document.getElementById('popupAd').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePopup();
+            }
+        });
+    </script>
+</body>
+</html>
