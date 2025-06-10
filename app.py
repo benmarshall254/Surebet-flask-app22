@@ -86,10 +86,26 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# Routes
+# Main Routes
 @app.route('/')
 def index():
     return render_template('index.html')
+
+# Basic login route (from first code)
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # Simple check, replace with your logic
+        if request.form['username'] == 'admin' and request.form['password'] == 'admin123':
+            return redirect(url_for('dashboard'))
+        else:
+            return "Invalid credentials"
+    return render_template('login.html')
+
+# Basic dashboard route (from first code)
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
 
 @app.route('/yesterday.html')
 def yesterday():
