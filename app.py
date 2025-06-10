@@ -119,6 +119,10 @@ def today():
 def admin_login():
     return render_template('admin.html')
 
+@app.route('/admin-dashboard.html')
+def admin_dashboard_html():
+    return render_template('admin-dashboard.html')
+
 # Analytics endpoint
 @app.route('/analytics', methods=['POST'])
 def analytics():
