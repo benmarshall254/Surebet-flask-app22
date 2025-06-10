@@ -188,7 +188,7 @@
             <p>Please sign in to continue</p>
         </div>
         
-        <form id="loginForm">
+        <form id="loginForm" action="/admin/login" method="POST">
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" required>
@@ -216,11 +216,7 @@
     </div>
 
     <script>
-        // Default credentials (for demo purposes)
-        const validCredentials = {
-            username: 'admin',
-            password: 'admin123'
-        };
+        // Credentials are now handled by Flask backend
 
         // Get form elements
         const loginForm = document.getElementById('loginForm');
@@ -241,33 +237,40 @@
             // Show loading state
             showLoading();
             
-            // Simulate API call delay
-            setTimeout(() => {
-                if (validateCredentials(username, password)) {
-                    // Successful login
-                    hideError();
-                    showSuccess();
-                    
-                    // Redirect to admin dashboard after a short delay
-                    setTimeout(() => {
-                        window.location.href = 'admin-dashboard.html';
-                    }, 1000);
+            // Create form data and submit to Flask
+            const formData = new FormData();
+            formData.append('username', username);
+            formData.append('password', password);
+            
+            fetch('/admin/login', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Successful login - Flask will redirect
+                    window.location.href = '/admin/dashboard';
                 } else {
                     // Failed login
                     hideLoading();
                     showError();
-                    
-                    // Clear password field
                     passwordInput.value = '';
                     passwordInput.focus();
                 }
-            }, 1500);
+            })
+            .catch(error => {
+                hideLoading();
+                showError();
+                passwordInput.value = '';
+                passwordInput.focus();
+            });
         });
 
-        function validateCredentials(username, password) {
-            return username === validCredentials.username && 
-                   password === validCredentials.password;
-        }
+        // Remove the client-side validation since Flask handles it
+        // function validateCredentials(username, password) {
+        //     return username === validCredentials.username && 
+        //            password === validCredentials.password;
+        // }
 
         function showLoading() {
             loginBtn.disabled = true;
