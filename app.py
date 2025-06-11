@@ -1,8 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from functools import wraps
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+
+# Rate limiter configuration (fixed)
+limiter = Limiter(key_func=get_remote_address)
+limiter.init_app(app)
 
 # Sample admin credentials
 admin_username = 'admin'
