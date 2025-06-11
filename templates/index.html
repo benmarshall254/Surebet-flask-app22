@@ -273,6 +273,122 @@
             font-style: italic;
         }
 
+        /* Admin Login Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #e74c3c;
+        }
+
+        .modal h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #5a6c7d;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(45deg, #2980b9, #1f618d);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .login-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 15px;
+            color: #7f8c8d;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -303,6 +419,11 @@
             .nav-btn {
                 width: 100%;
                 max-width: 280px;
+            }
+
+            .modal-content {
+                margin: 20% auto;
+                width: 95%;
             }
         }
     </style>
@@ -379,28 +500,188 @@
         </div>
     </div>
 
-    <!-- Hidden Admin Access with Advertisement -->
+    <!-- Secure Admin Access with Advertisement -->
     <div class="bottom-left-section">
-        <a href="admin.html" class="admin-indicator">!</a>
+        <button class="admin-indicator" onclick="openAdminLogin()">!</button>
         <div class="bottom-ad">
             <p class="bottom-ad-text">Sponsored Content<br>Click for offers</p>
         </div>
     </div>
 
-    <!-- Flask App.py Integration Script -->
+    <!-- Admin Login Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAdminLogin()">&times;</span>
+            <h2>Admin Access</h2>
+            <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+                <div class="form-group">
+                    <label for="adminUsername">Username:</label>
+                    <input type="text" id="adminUsername" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">Password:</label>
+                    <input type="password" id="adminPassword" name="password" required>
+                </div>
+                <button type="submit" class="login-btn" id="loginBtn">Login</button>
+                <div class="loading" id="loadingMessage">Authenticating...</div>
+                <div class="error-message" id="errorMessage"></div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // Silent visitor counter - connects to app.py backend
-        fetch('/analytics', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                page: 'index',
-                timestamp: new Date().toISOString()
-            })
-        }).catch(err => {
-            // Silent fail - don't show errors to users
+        // Admin Authentication Functions
+        function openAdminLogin() {
+            document.getElementById('adminModal').style.display = 'block';
+            document.getElementById('adminUsername').focus();
+        }
+
+        function closeAdminLogin() {
+            document.getElementById('adminModal').style.display = 'none';
+            document.getElementById('adminLoginForm').reset();
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('loadingMessage').style.display = 'none';
+            document.getElementById('loginBtn').disabled = false;
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('adminModal');
+            if (event.target === modal) {
+                closeAdminLogin();
+            }
+        }
+
+        // Handle Admin Login
+        async function handleAdminLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const errorMessage = document.getElementById('errorMessage');
+            const loadingMessage = document.getElementById('loadingMessage');
+
+            // Show loading state
+            loginBtn.disabled = true;
+            loadingMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+
+            try {
+                // Send authentication request to Flask backend
+                const response = await fetch('/admin/authenticate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password,
+                        csrf_token: getCSRFToken()
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // Successful authentication
+                    closeAdminLogin();
+                    
+                    // Store secure session token if provided
+                    if (data.token) {
+                        sessionStorage.setItem('admin_session', data.token);
+                    }
+                    
+                    // Redirect to admin dashboard
+                    window.location.href = '/admin/dashboard';
+                } else {
+                    // Authentication failed
+                    throw new Error(data.message || 'Invalid credentials');
+                }
+            } catch (error) {
+                errorMessage.textContent = error.message || 'Login failed. Please try again.';
+                errorMessage.style.display = 'block';
+                
+                // Security: Add delay after failed attempt
+                setTimeout(() => {
+                    loginBtn.disabled = false;
+                }, 2000);
+            } finally {
+                loadingMessage.style.display = 'none';
+            }
+        }
+
+        // Get CSRF token (if implemented in your Flask app)
+        function getCSRFToken() {
+            const token = document.querySelector('meta[name="csrf-token"]');
+            return token ? token.getAttribute('content') : null;
+        }
+
+        // Secure Analytics - connects to Flask backend
+        async function trackVisitor() {
+            try {
+                await fetch('/analytics/visitor', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        page: 'index',
+                        timestamp: new Date().toISOString(),
+                        referrer: document.referrer,
+                        user_agent: navigator.userAgent.substring(0, 200) // Limit length
+                    })
+                });
+            } catch (error) {
+                // Silent fail - don't show errors to users
+                console.debug('Analytics tracking failed');
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            trackVisitor();
+            
+            // Check if user is already authenticated
+            checkExistingSession();
+        });
+
+        // Check for existing admin session
+        async function checkExistingSession() {
+            const sessionToken = sessionStorage.getItem('admin_session');
+            if (sessionToken) {
+                try {
+                    const response = await fetch('/admin/verify-session', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${sessionToken}`
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        // Session is valid, could show admin indicator
+                        console.debug('Admin session verified');
+                    } else {
+                        // Session expired, remove token
+                        sessionStorage.removeItem('admin_session');
+                    }
+                } catch (error) {
+                    sessionStorage.removeItem('admin_session');
+                }
+            }
+        }
+
+        // Security: Clear session on page unload
+        window.addEventListener('beforeunload', function() {
+            // Optional: Clear sensitive data
+            if (sessionStorage.getItem('admin_session')) {
+                // Could notify server of logout
+                navigator.sendBeacon('/admin/logout', JSON.stringify({
+                    token: sessionStorage.getItem('admin_session')
+                }));
+            }
         });
     </script>
 </body>
