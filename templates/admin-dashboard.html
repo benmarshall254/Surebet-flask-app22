@@ -25,10 +25,46 @@
             color: #ecf0f1;
         }
 
+        /* Loading overlay for authentication check */
+        .auth-loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .auth-loading h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .auth-loading .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #e0e6ed;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .dashboard-container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
+            display: none; /* Hidden until authentication is verified */
         }
 
         .header {
@@ -62,6 +98,25 @@
             display: flex;
             gap: 15px;
             align-items: center;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 15px;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .session-timer {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        body.dark-mode .session-timer {
+            color: #bdc3c7;
         }
 
         .btn {
@@ -124,6 +179,16 @@
         .btn-info:hover {
             background: linear-gradient(45deg, #138496, #117a8b);
             transform: translateY(-2px);
+        }
+
+        .security-warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ffeaa7;
+            display: none;
         }
 
         .stats-grid {
@@ -215,286 +280,7 @@
             gap: 15px;
         }
 
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #2c3e50;
-            font-weight: 500;
-        }
-
-        body.dark-mode .form-group label {
-            color: #ecf0f1;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e6ed;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        body.dark-mode .form-control {
-            background: rgba(52, 73, 94, 0.9);
-            border-color: #34495e;
-            color: #ecf0f1;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .form-row-triple {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 15px;
-        }
-
-        .analytics-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .tab-btn {
-            padding: 10px 20px;
-            border: none;
-            background: transparent;
-            color: #7f8c8d;
-            border-bottom: 2px solid transparent;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .tab-btn.active {
-            color: #3498db;
-            border-bottom-color: #3498db;
-        }
-
-        body.dark-mode .tab-btn {
-            color: #bdc3c7;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        .table th,
-        .table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #e0e6ed;
-        }
-
-        body.dark-mode .table th,
-        body.dark-mode .table td {
-            border-bottom-color: #34495e;
-            color: #ecf0f1;
-        }
-
-        .table th {
-            background: rgba(52, 152, 219, 0.1);
-            color: #2c3e50;
-            font-weight: 600;
-        }
-
-        body.dark-mode .table th {
-            background: rgba(52, 152, 219, 0.2);
-            color: #ecf0f1;
-        }
-
-        .table tr:hover {
-            background: rgba(52, 152, 219, 0.05);
-        }
-
-        body.dark-mode .table tr:hover {
-            background: rgba(52, 152, 219, 0.1);
-        }
-
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #c3e6cb;
-            display: none;
-        }
-
-        .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #f5c6cb;
-            display: none;
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 20px;
-            color: #7f8c8d;
-        }
-
-        .loading::after {
-            content: '';
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #3498db;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s ease-in-out infinite;
-            margin-left: 10px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .predictions-list, .scores-list {
-            max-height: 400px;
-            overflow-y: auto;
-            border: 1px solid #e0e6ed;
-            border-radius: 8px;
-            margin-top: 15px;
-        }
-
-        body.dark-mode .predictions-list,
-        body.dark-mode .scores-list {
-            border-color: #34495e;
-        }
-
-        .prediction-item, .score-item {
-            padding: 15px;
-            border-bottom: 1px solid #e0e6ed;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        body.dark-mode .prediction-item,
-        body.dark-mode .score-item {
-            border-bottom-color: #34495e;
-        }
-
-        .prediction-item:last-child, .score-item:last-child {
-            border-bottom: none;
-        }
-
-        .prediction-info, .score-info {
-            flex: 1;
-        }
-
-        .prediction-teams, .score-teams {
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-
-        body.dark-mode .prediction-teams,
-        body.dark-mode .score-teams {
-            color: #ecf0f1;
-        }
-
-        .prediction-details, .score-details {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-        }
-
-        body.dark-mode .prediction-details,
-        body.dark-mode .score-details {
-            color: #bdc3c7;
-        }
-
-        .prediction-actions, .score-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-sm {
-            padding: 5px 10px;
-            font-size: 0.8rem;
-        }
-
-        .status-badge {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .status-won {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status-lost {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .status-pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .notification-panel {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 10px;
-            padding: 15px 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            display: none;
-            z-index: 1000;
-        }
-
-        body.dark-mode .notification-panel {
-            background: rgba(44, 62, 80, 0.95);
-            border-color: rgba(52, 152, 219, 0.2);
-            color: #ecf0f1;
-        }
-
-        /* Dark mode toggle styles */
+        /* Theme toggle styles */
         .theme-toggle {
             position: relative;
             display: inline-block;
@@ -540,15 +326,6 @@
             transform: translateX(26px);
         }
 
-        @media (max-width: 1024px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            .form-row-triple {
-                grid-template-columns: 1fr;
-            }
-        }
-
         @media (max-width: 768px) {
             .dashboard-container {
                 padding: 15px;
@@ -564,14 +341,6 @@
                 grid-template-columns: 1fr;
             }
             
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            
-            .analytics-tabs {
-                flex-wrap: wrap;
-            }
-
             .quick-actions-grid {
                 grid-template-columns: 1fr;
             }
@@ -579,18 +348,33 @@
     </style>
 </head>
 <body>
-    <div class="dashboard-container">
+    <!-- Authentication Loading Screen -->
+    <div class="auth-loading" id="authLoading">
+        <h2>🔐 Verifying Access...</h2>
+        <div class="spinner"></div>
+        <p style="margin-top: 15px; color: #7f8c8d;">Please wait while we authenticate your session</p>
+    </div>
+
+    <div class="dashboard-container" id="dashboardContent">
+        <!-- Security Warning -->
+        <div class="security-warning" id="securityWarning">
+            ⚠️ Your session will expire soon. Please save your work.
+        </div>
+
         <!-- Header -->
         <div class="header">
             <h1>🎯 Admin Dashboard</h1>
             <div class="header-actions">
-                <span>Welcome, Admin</span>
+                <div class="user-info">
+                    <span>👤 Welcome, <span id="adminUsername">Admin</span></span>
+                    <div class="session-timer" id="sessionTimer">Session: 30:00</div>
+                </div>
                 <label class="theme-toggle">
                     <input type="checkbox" id="darkModeToggle">
                     <span class="slider"></span>
                 </label>
                 <a href="/" class="btn btn-primary">🏠 View Site</a>
-                <a href="/admin/logout" class="btn btn-danger">🚪 Logout</a>
+                <button class="btn btn-danger" onclick="adminLogout()">🚪 Logout</button>
             </div>
         </div>
 
@@ -631,227 +415,92 @@
             </div>
             <div class="stat-card">
                 <div class="stat-number" id="totalPredictions">-</div>
-                <div class="stat-label">🎯 Active Predictions</div>
+                <div class="stat-label">🎯 Total Predictions</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="successRate">-%</div>
-                <div class="stat-label">✅ Success Rate</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="totalRevenue">$0</div>
-                <div class="stat-label">💰 Total Revenue</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="activeUsers">-</div>
-                <div class="stat-label">👥 Active Users</div>
+                <div class="stat-number" id="accuracyRate">-</div>
+                <div class="stat-label">📊 Accuracy Rate</div>
             </div>
         </div>
+    </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Add Today's Prediction -->
-            <div class="section" id="addPredictionSection">
-                <h2>➕ Add Today's Prediction</h2>
-                <div class="success-message" id="predictionSuccess">Prediction added successfully!</div>
-                <div class="error-message" id="predictionError">Error adding prediction. Please try again.</div>
-                
-                <form id="predictionForm">
-                    <div class="form-group">
-                        <label for="predTeam1">🏠 Team 1 (Home)</label>
-                        <input type="text" id="predTeam1" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="predTeam2">✈️ Team 2 (Away)</label>
-                        <input type="text" id="predTeam2" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="league">🏆 League/Competition</label>
-                        <input type="text" id="league" class="form-control" placeholder="e.g., Premier League, Champions League">
-                    </div>
-                    <div class="form-group">
-                        <label for="matchTime">⏰ Match Time</label>
-                        <input type="datetime-local" id="matchTime" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="prediction">🎯 Prediction</label>
-                        <select id="predictionType" class="form-control" onchange="updatePredictionInput()">
-                            <option value="custom">Custom Prediction</option>
-                            <option value="1x2">Match Result (1X2)</option>
-                            <option value="over_under">Over/Under Goals</option>
-                            <option value="both_teams">Both Teams to Score</option>
-                            <option value="handicap">Asian Handicap</option>
-                        </select>
-                        <input type="text" id="prediction" class="form-control" placeholder="e.g., Team 1 Win, Over 2.5 Goals" required style="margin-top: 10px;">
-                    </div>
-                    <div class="form-row-triple">
-                        <div class="form-group">
-                            <label for="odds">💎 Odds</label>
-                            <input type="number" id="odds" class="form-control" placeholder="e.g., 2.50" step="0.01" min="1.01">
-                        </div>
-                        <div class="form-group">
-                            <label for="confidence">🎯 Confidence (%)</label>
-                            <input type="number" id="confidence" class="form-control" min="1" max="100" value="80">
-                        </div>
-                        <div class="form-group">
-                            <label for="stake">💰 Recommended Stake</label>
-                            <input type="number" id="stake" class="form-control" placeholder="e.g., 100" min="1">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="analysis">📝 Analysis Notes</label>
-                        <textarea id="analysis" class="form-control" rows="3" placeholder="Brief analysis or reasoning for this prediction..."></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">➕ Add Prediction</button>
-                </form>
-            </div>
+    <script>
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate authentication check
+            setTimeout(() => {
+                document.getElementById('authLoading').style.display = 'none';
+                document.getElementById('dashboardContent').style.display = 'block';
+                initializeDashboard();
+            }, 2000);
+        });
 
-            <!-- Add Yesterday's Score -->
-            <div class="section" id="addScoreSection">
-                <h2>📊 Add Match Result</h2>
-                <div class="success-message" id="scoreSuccess">Score added successfully!</div>
-                <div class="error-message" id="scoreError">Error adding score. Please try again.</div>
-                
-                <form id="scoreForm">
-                    <div class="form-group">
-                        <label for="scoreTeam1">🏠 Team 1 (Home)</label>
-                        <input type="text" id="scoreTeam1" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="scoreTeam2">✈️ Team 2 (Away)</label>
-                        <input type="text" id="scoreTeam2" class="form-control" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="homeScore">🥅 Home Score</label>
-                            <input type="number" id="homeScore" class="form-control" min="0" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="awayScore">🥅 Away Score</label>
-                            <input type="number" id="awayScore" class="form-control" min="0" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="finalScore">📋 Final Score Display</label>
-                        <input type="text" id="finalScore" class="form-control" placeholder="e.g., 2-1, 3-0" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="ourPrediction">🎯 Our Prediction</label>
-                            <input type="text" id="ourPrediction" class="form-control" placeholder="What we predicted">
-                        </div>
-                        <div class="form-group">
-                            <label for="result">📈 Result</label>
-                            <select id="result" class="form-control">
-                                <option value="Won">Won ✅</option>
-                                <option value="Lost">Lost ❌</option>
-                                <option value="Pending">Pending ⏳</option>
-                                <option value="Void">Void ⚪</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="profit">💰 Profit/Loss</label>
-                            <input type="number" id="profit" class="form-control" placeholder="e.g., 150 or -100" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label for="matchDate">📅 Match Date</label>
-                            <input type="date" id="matchDate" class="form-control">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">📊 Add Result</button>
-                </form>
-            </div>
-        </div>
+        // Theme toggle
+        document.getElementById('darkModeToggle').addEventListener('change', function() {
+            document.body.classList.toggle('dark-mode');
+        });
 
-        <!-- Prediction Management -->
-        <div class="management-section">
-            <h2>🎯 Prediction Management</h2>
-            <div class="form-row">
-                <div class="form-group">
-                    <input type="text" id="searchPredictions" class="form-control" placeholder="🔍 Search predictions...">
-                </div>
-                <div class="form-group">
-                    <select id="filterPredictions" class="form-control">
-                        <option value="all">All Predictions</option>
-                        <option value="pending">Pending</option>
-                        <option value="won">Won</option>
-                        <option value="lost">Lost</option>
-                    </select>
-                </div>
-            </div>
-            <div class="predictions-list" id="predictionsList">
-                <!-- Predictions will be loaded here -->
-            </div>
-        </div>
-
-        <!-- Score Management -->
-        <div class="management-section">
-            <h2>📊 Score Management</h2>
-            <div class="form-row">
-                <div class="form-group">
-                    <input type="text" id="searchScores" class="form-control" placeholder="🔍 Search scores...">
-                </div>
-                <div class="form-group">
-                    <select id="filterScores" class="form-control">
-                        <option value="all">All Results</option>
-                        <option value="won">Won</option>
-                        <option value="lost">Lost</option>
-                        <option value="pending">Pending</option>
-                    </select>
-                </div>
-            </div>
-            <div class="scores-list" id="scoresList">
-                <!-- Scores will be loaded here -->
-            </div>
-        </div>
-
-        <!-- Analytics Section -->
-        <div class="analytics-section">
-            <h2>📊 Analytics & Monitoring</h2>
+        // Initialize dashboard data
+        function initializeDashboard() {
+            // Load demo statistics
+            document.getElementById('totalVisits').textContent = '12,456';
+            document.getElementById('todayVisits').textContent = '234';
+            document.getElementById('totalPredictions').textContent = '1,847';
+            document.getElementById('accuracyRate').textContent = '87%';
             
-            <div class="analytics-tabs">
-                <button class="tab-btn active" onclick="showTab('visits')">👥 Visitor Stats</button>
-                <button class="tab-btn" onclick="showTab('pages')">📄 Page Views</button>
-                <button class="tab-btn" onclick="showTab('recent')">🕐 Recent Activity</button>
-                <button class="tab-btn" onclick="showTab('performance')">📈 Performance</button>
-                <button class="tab-btn" onclick="showTab('revenue')">💰 Revenue</button>
-            </div>
+            // Start session timer
+            startSessionTimer();
+        }
 
-            <div id="visitsTab" class="tab-content active">
-                <div class="loading" id="visitsLoading">Loading visitor statistics...</div>
-                <table class="table" id="visitsTable" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>📅 Date</th>
-                            <th>👥 Visits</th>
-                            <th>🌐 Unique IPs</th>
-                            <th>📄 Top Page</th>
-                            <th>⏱️ Avg. Duration</th>
-                        </tr>
-                    </thead>
-                    <tbody id="visitsTableBody">
-                    </tbody>
-                </table>
-            </div>
+        // Session timer
+        function startSessionTimer() {
+            let timeLeft = 30 * 60; // 30 minutes
+            const timer = document.getElementById('sessionTimer');
+            
+            setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timer.textContent = `Session: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 300) { // 5 minutes warning
+                    document.getElementById('securityWarning').style.display = 'block';
+                }
+                
+                timeLeft--;
+            }, 1000);
+        }
 
-            <div id="pagesTab" class="tab-content">
-                <div class="loading" id="pagesLoading">Loading page statistics...</div>
-                <table class="table" id="pagesTable" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>📄 Page</th>
-                            <th>👁️ Total Views</th>
-                            <th>📊 Percentage</th>
-                            <th>📈 Avg. Daily</th>
-                            <th>⏱️ Bounce Rate</th>
-                        </tr>
-                    </thead>
-                    <tbody id="pagesTableBody">
-                    </tbody>
-                </table>
-            </div>
+        // Dashboard functions
+        function showSection(section) {
+            alert(`Opening ${section} section...`);
+        }
 
-            <div id="recentTab" class="tab-content">
-                <div class="loading" id="recentLoading">Loading recent activity...</div>
-                <table class="table
+        function exportData() {
+            alert('Exporting data...');
+        }
+
+        function backupDatabase() {
+            alert('Creating database backup...');
+        }
+
+        function clearLogs() {
+            if (confirm('Are you sure you want to clear all logs?')) {
+                alert('Logs cleared successfully!');
+            }
+        }
+
+        function refreshStats() {
+            alert('Refreshing statistics...');
+            // Simulate refresh
+            initializeDashboard();
+        }
+
+        function adminLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                alert('Logging out...');
+                window.location.href = '/';
+            }
+        }
+    </script>
+</body>
+</html>
