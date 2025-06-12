@@ -1,73 +1,485 @@
-// Clear admin session
-        function clearAdminSession() {
-            localStorage.removeItem('adminToken');
-            localStorage.removeItem('adminTokenTime');
-            localStorage.removeItem('adminUsername');
-        }
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Admin Login - SureBet Tips</title>  <style>  
+    * {  
+        margin: 0;  
+        padding: 0;  
+        box-sizing: border-box;  
+    }  
 
-        // Show error message
-        function showErrorMessage(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
-            successMessage.style.display = 'none';
-            attemptsWarning.style.display = 'none';
-        }
+    body {  
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);  
+        min-height: 100vh;  
+        display: flex;  
+        align-items: center;  
+        justify-content: center;  
+        color: #333;  
+    }  
 
-        // Show success message
-        function showSuccessMessage(message) {
-            successMessage.textContent = message;
-            successMessage.style.display = 'block';
-            errorMessage.style.display = 'none';
-            attemptsWarning.style.display = 'none';
-        }
+    .login-container {  
+        background: rgba(255, 255, 255, 0.95);  
+        backdrop-filter: blur(10px);  
+        border-radius: 20px;  
+        padding: 40px;  
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);  
+        border: 1px solid rgba(255, 255, 255, 0.2);  
+        width: 100%;  
+        max-width: 400px;  
+        text-align: center;  
+    }  
 
-        // Show attempts warning
-        function showAttemptsWarning(message) {
-            attemptsWarning.textContent = message;
-            attemptsWarning.style.display = 'block';
-            errorMessage.style.display = 'none';
-            successMessage.style.display = 'none';
-        }
+    .login-header {  
+        margin-bottom: 30px;  
+    }  
 
-        // Handle login form submission
-        loginForm.addEventListener('submit', function (e) {
-            e.preventDefault();
+    .login-header h1 {  
+        color: #2c3e50;  
+        font-size: 2rem;  
+        margin-bottom: 10px;  
+    }  
 
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value.trim();
+    .login-header p {  
+        color: #7f8c8d;  
+        font-size: 1rem;  
+    }  
 
-            if (isAccountLocked()) return;
+    .form-group {  
+        margin-bottom: 20px;  
+        text-align: left;  
+    }  
 
-            loadingMessage.style.display = 'block';
-            loginBtn.disabled = true;
+    .form-group label {  
+        display: block;  
+        margin-bottom: 8px;  
+        color: #2c3e50;  
+        font-weight: 500;  
+    }  
 
-            setTimeout(() => {
-                loadingMessage.style.display = 'none';
-                loginBtn.disabled = false;
+    .form-control {  
+        width: 100%;  
+        padding: 15px;  
+        border: 2px solid #e0e6ed;  
+        border-radius: 10px;  
+        font-size: 1rem;  
+        transition: border-color 0.3s ease;  
+        background: rgba(255, 255, 255, 0.9);  
+    }  
 
-                if (validateCredentials(username, password)) {
-                    createAdminSession();
-                    showSuccessMessage('Login successful! Redirecting...');
-                    setTimeout(() => {
-                        window.location.href = 'admin-dashboard.html';
-                    }, 1200);
-                } else {
-                    loginAttempts++;
-                    lastAttemptTime = Date.now();
-                    localStorage.setItem('loginAttempts', loginAttempts.toString());
-                    localStorage.setItem('lastAttemptTime', lastAttemptTime.toString());
+    .form-control:focus {  
+        outline: none;  
+        border-color: #3498db;  
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);  
+    }  
 
-                    showErrorMessage('Invalid username or password.');
+    .btn {  
+        width: 100%;  
+        padding: 15px;  
+        border: none;  
+        border-radius: 10px;  
+        font-weight: 600;  
+        font-size: 1rem;  
+        cursor: pointer;  
+        transition: all 0.3s ease;  
+        background: linear-gradient(45deg, #3498db, #2980b9);  
+        color: white;  
+        margin-top: 10px;  
+    }  
 
-                    if (loginAttempts >= MAX_ATTEMPTS) {
-                        showAttemptsWarning('Too many failed attempts. Please try again later.');
-                    }
-                }
-            }, 1000);
-        });
+    .btn:hover {  
+        background: linear-gradient(45deg, #2980b9, #1f618d);  
+        transform: translateY(-2px);  
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);  
+    }  
 
-        // Run initial session check
-        checkExistingSession();
-    </script>
-</body>
-</html>
+    .error-message {  
+        background: #f8d7da;  
+        color: #721c24;  
+        padding: 12px 15px;  
+        border-radius: 8px;  
+        margin-bottom: 20px;  
+        border: 1px solid #f5c6cb;  
+        display: none;  
+        text-align: left;  
+    }  
+
+    .success-message {  
+        background: #d4edda;  
+        color: #155724;  
+        padding: 12px 15px;  
+        border-radius: 8px;  
+        margin-bottom: 20px;  
+        border: 1px solid #c3e6cb;  
+        display: none;  
+        text-align: left;  
+    }  
+
+    .loading {  
+        display: none;  
+        color: #7f8c8d;  
+        margin-top: 10px;  
+    }  
+
+    .loading::after {  
+        content: '';  
+        display: inline-block;  
+        width: 20px;  
+        height: 20px;  
+        border: 3px solid #3498db;  
+        border-radius: 50%;  
+        border-top-color: transparent;  
+        animation: spin 1s ease-in-out infinite;  
+        margin-left: 10px;  
+    }  
+
+    @keyframes spin {  
+        to { transform: rotate(360deg); }  
+    }  
+
+    .security-info {  
+        margin-top: 20px;  
+        padding: 15px;  
+        background: rgba(52, 152, 219, 0.1);  
+        border-radius: 8px;  
+        font-size: 0.9rem;  
+        color: #2c3e50;  
+    }  
+
+    .attempts-warning {  
+        background: #fff3cd;  
+        color: #856404;  
+        padding: 12px 15px;  
+        border-radius: 8px;  
+        margin-bottom: 20px;  
+        border: 1px solid #ffeaa7;  
+        display: none;  
+    }  
+
+    .password-strength {  
+        margin-top: 5px;  
+        font-size: 0.8rem;  
+        display: none;  
+    }  
+
+    .strength-weak { color: #e74c3c; }  
+    .strength-medium { color: #f39c12; }  
+    .strength-strong { color: #27ae60; }  
+
+    @media (max-width: 480px) {  
+        .login-container {  
+            margin: 20px;  
+            padding: 30px 20px;  
+        }  
+    }  
+</style>
+
+</head>  
+<body>  
+    <div class="login-container">  
+        <div class="login-header">  
+            <h1>🔐 Admin Login</h1>  
+            <p>Enter your credentials to access the dashboard</p>  
+        </div>  <div class="error-message" id="errorMessage"></div>  
+    <div class="success-message" id="successMessage"></div>  
+    <div class="attempts-warning" id="attemptsWarning"></div>  
+
+    <form id="loginForm">  
+        <div class="form-group">  
+            <label for="username">👤 Username</label>  
+            <input type="text" id="username" class="form-control" required autocomplete="username">  
+        </div>  
+
+        <div class="form-group">  
+            <label for="password">🔑 Password</label>  
+            <input type="password" id="password" class="form-control" required autocomplete="current-password">  
+            <div class="password-strength" id="passwordStrength"></div>  
+        </div>  
+
+        <button type="submit" class="btn" id="loginBtn">  
+            🚀 Login to Dashboard  
+        </button>  
+
+        <div class="loading" id="loadingMessage">Authenticating...</div>  
+    </form>  
+
+    <div class="security-info">  
+        🛡️ This is a secure admin area. All login attempts are logged and monitored.  
+    </div>  
+</div>  
+
+<script>  
+    // Admin credentials - In production, these should be stored securely server-side  
+    const ADMIN_CREDENTIALS = {  
+        username: 'admin',  
+        password: 'SecurePass123!', // Change this to a strong password  
+        sessionTimeout: 30 * 60 * 1000 // 30 minutes  
+    };  
+
+    // Login attempt tracking  
+    let loginAttempts = parseInt(localStorage.getItem('loginAttempts') || '0');  
+    let lastAttemptTime = parseInt(localStorage.getItem('lastAttemptTime') || '0');  
+    const MAX_ATTEMPTS = 5;  
+    const LOCKOUT_TIME = 15 * 60 * 1000; // 15 minutes  
+
+    // DOM elements  
+    const loginForm = document.getElementById('loginForm');  
+    const errorMessage = document.getElementById('errorMessage');  
+    const successMessage = document.getElementById('successMessage');  
+    const attemptsWarning = document.getElementById('attemptsWarning');  
+    const loadingMessage = document.getElementById('loadingMessage');  
+    const loginBtn = document.getElementById('loginBtn');  
+    const usernameInput = document.getElementById('username');  
+    const passwordInput = document.getElementById('password');  
+
+    // Check if user is already logged in  
+    function checkExistingSession() {  
+        const adminToken = localStorage.getItem('adminToken');  
+        const tokenTime = parseInt(localStorage.getItem('adminTokenTime') || '0');  
+        const currentTime = Date.now();  
+
+        if (adminToken && (currentTime - tokenTime) < ADMIN_CREDENTIALS.sessionTimeout) {  
+            // Valid session exists, redirect to dashboard  
+            showSuccessMessage('Session found. Redirecting to dashboard...');  
+            setTimeout(() => {  
+                window.location.href = 'admin-dashboard.html';  
+            }, 1000);  
+            return true;  
+        } else if (adminToken) {  
+            // Session expired, clear it  
+            clearAdminSession();  
+        }  
+        return false;  
+    }  
+
+    // Check if account is locked  
+    function isAccountLocked() {  
+        const currentTime = Date.now();  
+        if (loginAttempts >= MAX_ATTEMPTS && (currentTime - lastAttemptTime) < LOCKOUT_TIME) {  
+            const remainingTime = Math.ceil((LOCKOUT_TIME - (currentTime - lastAttemptTime)) / 60000);  
+            showAttemptsWarning(`Account locked due to too many failed attempts. Try again in ${remainingTime} minutes.`);  
+            return true;  
+        }  
+        return false;  
+    }  
+
+    // Generate secure token  
+    function generateSecureToken() {  
+        const array = new Uint32Array(4);  
+        crypto.getRandomValues(array);  
+        return Array.from(array, dec => dec.toString(16)).join('');  
+    }  
+
+    // Hash password (simple implementation - use proper hashing in production)  
+    function hashPassword(password) {  
+        let hash = 0;  
+        for (let i = 0; i < password.length; i++) {  
+            const char = password.charCodeAt(i);  
+            hash = ((hash << 5) - hash) + char;  
+            hash = hash & hash; // Convert to 32-bit integer  
+        }  
+        return hash.toString();  
+    }  
+
+    // Validate credentials  
+    function validateCredentials(username, password) {  
+        return username === ADMIN_CREDENTIALS.username &&   
+               password === ADMIN_CREDENTIALS.password;  
+    }  
+
+    // Create admin session  
+    function createAdminSession() {  
+        const token = generateSecureToken();  
+        const currentTime = Date.now();  
+          
+        localStorage.setItem('adminToken', token);  
+        localStorage.setItem('adminTokenTime', currentTime.toString());  
+        localStorage.setItem('adminUsername', ADMIN_CREDENTIALS.username);  
+          
+        // Reset login attempts on successful login  
+        localStorage.removeItem('loginAttempts');  
+        localStorage.removeItem('lastAttemptTime');  
+    }  
+
+    // Clear admin session  
+    function clearAdminSession() {  
+        localStorage.removeItem('adminToken');  
+        localStorage.removeItem('adminTokenTime');  
+        localStorage.removeItem('adminUsername');  
+    }  
+
+    // Show error message  
+    function showErrorMessage(message) {  
+        errorMessage.textContent = message;  
+        errorMessage.style.display = 'block';  
+        successMessage.style.display = 'none';  
+    }  
+
+    // Show success message  
+    function showSuccessMessage(message) {  
+        successMessage.textContent = message;  
+        successMessage.style.display = 'block';  
+        errorMessage.style.display = 'none';  
+    }  
+
+    // Show attempts warning  
+    function showAttemptsWarning(message) {  
+        attemptsWarning.textContent = message;  
+        attemptsWarning.style.display = 'block';  
+    }  
+
+    // Hide messages  
+    function hideMessages() {  
+        errorMessage.style.display = 'none';  
+        successMessage.style.display = 'none';  
+        attemptsWarning.style.display = 'none';  
+    }  
+
+    // Show loading state  
+    function showLoading(show) {  
+        loadingMessage.style.display = show ? 'block' : 'none';  
+        loginBtn.disabled = show;  
+        loginBtn.textContent = show ? 'Authenticating...' : '🚀 Login to Dashboard';  
+    }  
+
+    // Handle login form submission  
+    loginForm.addEventListener('submit', async function(e) {  
+        e.preventDefault();  
+          
+        hideMessages();  
+          
+        // Check if account is locked  
+        if (isAccountLocked()) {  
+            return;  
+        }  
+
+        const username = usernameInput.value.trim();  
+        const password = passwordInput.value;  
+
+        // Basic validation  
+        if (!username || !password) {  
+            showErrorMessage('Please enter both username and password.');  
+            return;  
+        }  
+
+        showLoading(true);  
+
+        // Simulate authentication delay (remove in production)  
+        await new Promise(resolve => setTimeout(resolve, 1000));  
+
+        // Validate credentials  
+        if (validateCredentials(username, password)) {  
+            // Successful login  
+            createAdminSession();  
+            showSuccessMessage('Login successful! Redirecting to dashboard...');  
+              
+            // Log successful login  
+            console.log('Admin login successful:', {  
+                username: username,  
+                timestamp: new Date().toISOString(),  
+                ip: 'client-ip' // In production, get real IP  
+            });  
+
+            // Redirect to dashboard  
+            setTimeout(() => {  
+                window.location.href = 'admin-dashboard.html';  
+            }, 1500);  
+        } else {  
+            // Failed login  
+            loginAttempts++;  
+            lastAttemptTime = Date.now();  
+            localStorage.setItem('loginAttempts', loginAttempts.toString());  
+            localStorage.setItem('lastAttemptTime', lastAttemptTime.toString());  
+
+            // Log failed login attempt  
+            console.warn('Failed admin login attempt:', {  
+                username: username,  
+                attempts: loginAttempts,  
+                timestamp: new Date().toISOString(),  
+                ip: 'client-ip' // In production, get real IP  
+            });  
+
+            if (loginAttempts >= MAX_ATTEMPTS) {  
+                showErrorMessage('Too many failed attempts. Account locked for 15 minutes.');  
+            } else {  
+                const remainingAttempts = MAX_ATTEMPTS - loginAttempts;  
+                showErrorMessage(`Invalid credentials. ${remainingAttempts} attempts remaining.`);  
+            }  
+
+            // Clear password field  
+            passwordInput.value = '';  
+        }  
+
+        showLoading(false);  
+    });  
+
+    // Password strength indicator (optional)  
+    passwordInput.addEventListener('input', function() {  
+        const password = this.value;  
+        const strengthIndicator = document.getElementById('passwordStrength');  
+          
+        if (password.length === 0) {  
+            strengthIndicator.style.display = 'none';  
+            return;  
+        }  
+
+        let strength = 0;  
+        if (password.length >= 8) strength++;  
+        if (/[A-Z]/.test(password)) strength++;  
+        if (/[a-z]/.test(password)) strength++;  
+        if (/[0-9]/.test(password)) strength++;  
+        if (/[^A-Za-z0-9]/.test(password)) strength++;  
+
+        strengthIndicator.style.display = 'block';  
+          
+        if (strength <= 2) {  
+            strengthIndicator.className = 'password-strength strength-weak';  
+            strengthIndicator.textContent = 'Weak password';  
+        } else if (strength <= 3) {  
+            strengthIndicator.className = 'password-strength strength-medium';  
+            strengthIndicator.textContent = 'Medium strength';  
+        } else {  
+            strengthIndicator.className = 'password-strength strength-strong';  
+            strengthIndicator.textContent = 'Strong password';  
+        }  
+    });  
+
+    // Clear messages on input  
+    usernameInput.addEventListener('input', hideMessages);  
+    passwordInput.addEventListener('input', hideMessages);  
+
+    // Check for existing session on page load  
+    document.addEventListener('DOMContentLoaded', function() {  
+        checkExistingSession();  
+          
+        // Show attempts warning if account is locked  
+        if (isAccountLocked()) {  
+            loginBtn.disabled = true;  
+        }  
+    });  
+
+    // Security: Clear form data on page unload  
+    window.addEventListener('beforeunload', function() {  
+        usernameInput.value = '';  
+        passwordInput.value = '';  
+    });  
+
+    // Security: Disable right-click context menu  
+    document.addEventListener('contextmenu', function(e) {  
+        e.preventDefault();  
+    });  
+
+    // Security: Disable certain keyboard shortcuts  
+    document.addEventListener('keydown', function(e) {  
+        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U  
+        if (e.key === 'F12' ||   
+            (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||  
+            (e.ctrlKey && e.key === 'u')) {  
+            e.preventDefault();  
+        }  
+    });  
+</script>
+
+</body>  
+</html>  
