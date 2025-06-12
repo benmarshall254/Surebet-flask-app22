@@ -6,9 +6,8 @@ from flask_limiter.util import get_remote_address
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-# Rate limiter configuration (fixed)
-limiter = Limiter(key_func=get_remote_address)
-limiter.init_app(app)
+# Correct Rate Limiter setup
+limiter = Limiter(get_remote_address, app=app)
 
 # Sample admin credentials
 admin_username = 'admin'
@@ -25,7 +24,7 @@ def login_required(f):
 
 @app.route('/')
 def index():
-    return redirect(url_for('login'))
+    return render_template('index.html')  # Show index.html when opening app
 
 @app.route('/login.html', methods=['GET', 'POST'])
 def login():
@@ -34,7 +33,7 @@ def login():
         password = request.form['password']
         if username == admin_username and password == admin_password:
             session['logged_in'] = True
-            return redirect(url_for('admin_dashboard'))  # Correct reference
+            return redirect(url_for('admin_dashboard'))
         else:
             return render_template('login.html', error='Invalid credentials')
     return render_template('login.html')
@@ -46,7 +45,7 @@ def logout():
 
 @app.route('/admin-dashboard.html')
 @login_required
-def admin_dashboard():  # Corrected function name here
+def admin_dashboard():
     return render_template('admin-dashboard.html')
 
 if __name__ == '__main__':
